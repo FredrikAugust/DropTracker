@@ -5,7 +5,9 @@ const room = window.location.pathname.replace(/^\/room\//, '');;
 document.title = `DropTracker - ${room}`;
 
 // Establish a WS connection
-const WSConn = new WebSocket('ws://localhost:4001/ws');
+const WSPort = window.location.port ? `:${window.location.port}` : '';
+const WSSecure = window.location.protocol.endsWith('s:') ? 's' : '';
+const WSConn = new WebSocket(`ws${WSSecure}://${window.location.hostname}${WSPort}/ws`);
 
 // Setup handler for WS conn
 WSConn.addEventListener('message', message => {
