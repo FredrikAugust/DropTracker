@@ -5,3 +5,7 @@ const items = [
   {id: 4151, name: 'Abyssal Whip'},
   {id: 4153, name: 'Granite Maul'}
 ];
+
+function getItemByName(name) {
+  return items.find(item => name == item.name);
+}

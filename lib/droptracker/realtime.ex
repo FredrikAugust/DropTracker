@@ -16,6 +16,8 @@ defmodule Droptracker.Realtime do
   def websocket_handle({:text, content}, req, state) do
     case Poison.decode(content) do
       {:ok, data} ->
+        IO.puts("Received new command")
+        IO.inspect(data)
         {:reply, handle_command(data), req, state}
       _ ->
         {:reply, {:text, "Invalid request."}, req, state}
@@ -23,8 +25,12 @@ defmodule Droptracker.Realtime do
   end
 
   # Format and forward elixir messages to client
-  def websocket_info(message, req, state) do
-    {:reply, {:text, message}, req, state}
+  def websocket_info({:add_drop, drop, quantity}, req, state) do
+    {:reply, {:text, Poison.encode(%{"item" => drop, "quantity" => quantity})}, req, state}
+  end
+
+  def websocket_info(_, req, state) do
+    {:noreply, req, state}
   end
 
   # No matter why we terminate, remove all of this pids subscriptions
@@ -36,6 +42,11 @@ defmodule Droptracker.Realtime do
   defp handle_command(%{"command" => "join", "room" => room}) do
     GenServer.call(Droptracker.Roomkeeper, {:join, room})
     {:text, "Okidoki."}
+  end
+
+  defp handle_command(%{"command" => "add_drop", "drop" => drop, "quantity" => quantity}) do
+    IO.inspect(drop)
+    {:text, "Added item."}
   end
 
   defp handle_command(_) do
