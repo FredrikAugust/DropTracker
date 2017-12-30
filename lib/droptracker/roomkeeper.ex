@@ -10,7 +10,6 @@ defmodule Droptracker.Roomkeeper do
   end
 
   def handle_call({:users_in_room, room}, _, state) do
-    IO.puts("Getting users in room")
     {:reply, Map.get(state, room), state}
   end
 
@@ -20,8 +19,6 @@ defmodule Droptracker.Roomkeeper do
   end
 
   def handle_cast({:leave, from_pid}, state) do
-    IO.puts("Leaving room")
-
     find_result = Enum.find(state, fn(elem) ->
       {_, users_pids} = elem
       Enum.any?(users_pids, fn(pid) -> pid == from_pid end)
@@ -29,8 +26,7 @@ defmodule Droptracker.Roomkeeper do
 
     case find_result do
       {users_room, _} ->
-        updated_state = Map.update(state, users_room, [], &(&1 -- []))
-        IO.inspect(updated_state)
+        updated_state = Map.update(state, users_room, [], &(&1 -- [from_pid]))
         {:noreply, updated_state}
       nil ->
         {:noreply, state}

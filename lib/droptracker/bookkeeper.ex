@@ -14,12 +14,9 @@ defmodule Droptracker.Bookkeeper do
 
     Enum.each(users_in_room, &(send(&1, {:add_drop, drop, quantity})))
 
-    IO.inspect(drop)
     spawn(fn() -> send_price(users_in_room, Map.get(drop, "id")) end)
 
     new_state = Map.update(state, room, [{drop, quantity}], &([{drop, quantity}] ++ &1))
-
-    IO.inspect(new_state)
 
     {:noreply, new_state}
   end
