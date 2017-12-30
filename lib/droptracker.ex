@@ -10,7 +10,8 @@ defmodule Droptracker do
         port: 4001
       ]),
       Supervisor.Spec.worker(Droptracker.Roomkeeper, [], []),
-      Supervisor.Spec.worker(Droptracker.Bookkeeper, [], [])
+      Supervisor.Spec.worker(Droptracker.Bookkeeper, [], []),
+      Supervisor.Spec.worker(Droptracker.Banker, [], [])
     ]
 
     opts = [strategy: :one_for_one, name: Droptracker.Supervisor]

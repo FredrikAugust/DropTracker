@@ -31,6 +31,5 @@ defmodule Droptracker.Roomkeeper do
       nil ->
         {:noreply, state}
     end
-
   end
 end
