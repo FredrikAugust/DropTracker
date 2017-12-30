@@ -86,8 +86,11 @@ function addDrop(item, quantity) {
   nameInput.value = '';
   nameInput.focus();
 
+  const fixedQuantity = quantity.replace(/k$/, "000");
+  console.log(fixedQuantity)
+
   // Tell the server that we're adding a new drop // alert the other clients
-  WSConn.send(JSON.stringify({command: 'add_drop', room, drop: getItemByName(item), quantity}))
+  WSConn.send(JSON.stringify({command: 'add_drop', room, drop: getItemByName(item), quantity: fixedQuantity}))
 }
 
 function renderDrop(item, quantity) {
