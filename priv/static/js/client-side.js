@@ -2,6 +2,7 @@
 
 // Establish which room was joined
 const room = window.location.pathname.replace(/^\/room\//, '');;
+document.title = `DropTracker - ${room}`;
 
 // Establish a WS connection
 const WSConn = new WebSocket('ws://localhost:4001/ws');
