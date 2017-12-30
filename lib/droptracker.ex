@@ -4,10 +4,17 @@ defmodule Droptracker do
   use Application
 
   def start(_type, _args) do
+    port = case System.get_env("PORT") do
+      nil ->
+        4001
+      string ->
+        String.to_integer(string)
+    end
+
     children = [
       Plug.Adapters.Cowboy.child_spec(:http, Droptracker.Router, [], [
         dispatch: dispatch(),
-        port: System.get_env("PORT") || 4001
+        port: port
       ]),
       Supervisor.Spec.worker(Droptracker.Roomkeeper, [], []),
       Supervisor.Spec.worker(Droptracker.Bookkeeper, [], [])
