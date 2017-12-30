@@ -14,9 +14,10 @@ defmodule Droptracker.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      application: [:cowboy, :plug],
+      applications: [:cowboy, :plug],
       extra_applications: [:logger],
-      mod: {Droptracker, []}
+      mod: {Droptracker, []},
+      registered: [Droptracker]
     ]
   end
 
