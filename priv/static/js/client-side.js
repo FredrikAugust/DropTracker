@@ -27,6 +27,8 @@ WSConn.addEventListener('open', message => {
   WSConn.send(JSON.stringify({ command: 'join', room }));
 });
 
+let sumOfDrops = 0;
+
 // Setup autocomplete
 const nameInput = document.querySelector('.name>input');
 const quantityInput = document.querySelector('.quantity>input');
@@ -86,8 +88,10 @@ function addDrop(item, quantity) {
 }
 
 function renderDrop(item, quantity) {
+  const itemID = getItemByName(item).id;
+
   let dropEl = document.createElement('div');
-  dropEl.className = 'drop';
+  dropEl.className = `drop item-${itemID}`;
 
   let nameHeaderEl = document.createElement('h3');
   nameHeaderEl.appendChild(document.createTextNode(item));
@@ -95,10 +99,26 @@ function renderDrop(item, quantity) {
   let quantityEl = document.createElement('p');
   quantityEl.appendChild(document.createTextNode(`x ${quantity}`));
 
+  let priceEl = document.createElement('p');
+  priceEl.className = 'price';
+  priceEl.appendChild(document.createTextNode('Retrieving price...'));
+
   dropEl.appendChild(nameHeaderEl);
   dropEl.appendChild(quantityEl);
+  dropEl.appendChild(priceEl);
   
   dropsEl.prepend(dropEl);
+
+  fetch(`http://api.rsbuddy.com/grandExchange?a=guidePrice&i=${itemID}`).then((response) => {
+    return response.json();
+  }).then((blob) => {
+    const items = document.querySelectorAll(`.item-${itemID}>.price`);
+    for (const item of items) {
+      item.innerHTML = `Overall: ${blob.overall} | Buying: ${blob.buying} | Selling: ${blob.selling}`;
+    }
+    sumOfDrops += blob.overall * quantity;
+    document.querySelector('.tally .total').innerHTML = sumOfDrops;
+  });
 }
 
 function removeDrop(item, quantity) {
