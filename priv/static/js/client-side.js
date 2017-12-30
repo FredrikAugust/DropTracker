@@ -112,7 +112,7 @@ function renderDrop(item, quantity) {
   
   dropsEl.prepend(dropEl);
 
-  fetch(`http://api.rsbuddy.com/grandExchange?a=guidePrice&i=${itemID}`).then((response) => {
+  fetch(`https://api.rsbuddy.com/grandExchange?a=guidePrice&i=${itemID}`).then((response) => {
     return response.json();
   }).then((blob) => {
     const items = document.querySelectorAll(`.item-${itemID}>.price`);
