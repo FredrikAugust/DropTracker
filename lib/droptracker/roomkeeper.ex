@@ -24,13 +24,19 @@ defmodule Droptracker.Roomkeeper do
   def handle_cast({:leave, from_pid}, state) do
     IO.puts("Leaving room")
 
-    {users_room, _} = Enum.find(state, fn(elem) ->
+    find_result = Enum.find(state, fn(elem) ->
       {_, users_pids} = elem
       Enum.any?(users_pids, fn(pid) -> pid == from_pid end)
     end)
 
-    updated_state = Map.update(state, users_room, [], &(&1 -- [from_pid]))
-    IO.inspect(updated_state)
-    {:noreply, updated_state}
+    case find_result do
+      {users_room, _} ->
+        updated_state = Map.update(state, users_room, [], &(&1 -- []))
+        IO.inspect(updated_state)
+        {:noreply, updated_state}
+      nil ->
+        {:noreply, state}
+    end
+
   end
 end
