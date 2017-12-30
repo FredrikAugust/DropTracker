@@ -8,6 +8,14 @@ defmodule Droptracker.Router do
   plug :dispatch
 
   get "/" do
+    send_resp(conn, 200, "To come someday")
+  end
+
+  get "/room/:_" do
     send_file(conn, 200, "priv/static/room.html")
+  end
+
+  match _ do
+    send_resp(conn, 404, "Oh, well.. this is awkward.")
   end
 end
