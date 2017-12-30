@@ -26,7 +26,8 @@ defmodule Droptracker.Realtime do
 
   # Format and forward elixir messages to client
   def websocket_info({:add_drop, drop, quantity}, req, state) do
-    {:reply, {:text, Poison.encode(%{"item" => drop, "quantity" => quantity})}, req, state}
+    {:ok, response} = Poison.encode(%{"item" => drop, "quantity" => quantity})
+    {:reply, {:text, response}, req, state}
   end
 
   def websocket_info(_, req, state) do
@@ -35,17 +36,18 @@ defmodule Droptracker.Realtime do
 
   # No matter why we terminate, remove all of this pids subscriptions
   def websocket_terminate(_reason, _req, _state) do
-    GenServer.call(Droptracker.Roomkeeper, :leave)
+    GenServer.cast(Droptracker.Roomkeeper, {:leave, self()})
     :ok
   end
 
   defp handle_command(%{"command" => "join", "room" => room}) do
-    GenServer.call(Droptracker.Roomkeeper, {:join, room})
-    {:text, "Okidoki."}
+    GenServer.cast(Droptracker.Roomkeeper, {:join, room, self()})
+    {:text, "Joined room " <> room <> "."}
   end
 
-  defp handle_command(%{"command" => "add_drop", "drop" => drop, "quantity" => quantity}) do
-    IO.inspect(drop)
+  defp handle_command(%{"command" => "add_drop", "drop" => drop, "quantity" => quantity, "room" => room}) do
+    GenServer.cast(Droptracker.Bookkeeper, {:add_drop, drop, quantity, room})
+    # TODO: get price and return that
     {:text, "Added item."}
   end
 

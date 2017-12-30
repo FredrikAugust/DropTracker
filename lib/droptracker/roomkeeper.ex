@@ -9,29 +9,28 @@ defmodule Droptracker.Roomkeeper do
     {:ok, %{}}
   end
 
-  def handle_call({:join, room}, from, state) do
+  def handle_cast({:join, room, from}, state) do
     IO.puts("Joining room")
     updated_state = Map.update(state, room, [from], &(&1 ++ [from]))
     IO.inspect(updated_state)
-    {:reply, :ok, updated_state}
+    {:noreply, updated_state}
   end
 
-  def handle_call(:leave, from, state) do
+  def handle_call({:users_in_room, room}, _, state) do
+    IO.puts("Getting users in room")
+    {:reply, Map.get(state, room), state}
+  end
+
+  def handle_cast({:leave, from_pid}, state) do
     IO.puts("Leaving room")
-    # check if pid is anywhere to be found
-    {from_pid, _} = from
 
     {users_room, _} = Enum.find(state, fn(elem) ->
-      {_, users} = elem
-      users_pids = Enum.map(users, &(List.first(Tuple.to_list(&1))))
+      {_, users_pids} = elem
       Enum.any?(users_pids, fn(pid) -> pid == from_pid end)
     end)
 
-    current_users = Map.get(state, users_room)
-    updated_users = List.keydelete(current_users, from_pid, 0)
-
-    updated_state = Map.update(state, users_room, [], fn(_) -> updated_users end)
+    updated_state = Map.update(state, users_room, [], &(&1 -- [from_pid]))
     IO.inspect(updated_state)
-    {:reply, :ok, updated_state}
+    {:noreply, updated_state}
   end
 end

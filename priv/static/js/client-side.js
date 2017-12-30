@@ -75,7 +75,7 @@ function addDrop(item, quantity) {
   nameInput.focus();
 
   // Tell the server that we're adding a new drop // alert the other clients
-  WSConn.send(JSON.stringify({command: 'add_drop', drop: getItemByName(item), quantity}))
+  WSConn.send(JSON.stringify({command: 'add_drop', room, drop: getItemByName(item), quantity}))
 
   let dropEl = document.createElement('div');
   dropEl.className = 'drop';
