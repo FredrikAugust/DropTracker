@@ -1,0 +1,61 @@
+/* Styling for the 'program page'.
+ * Copyright Fredrik A. Madsen-Malmo 2017
+ **/
+
+body,
+html,
+.container {
+  height: 100%;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 10% 80% 10%;
+}
+
+input {
+  height: 100%;
+  width: 100%;
+
+  border: 1px solid rgb(41, 41, 41);
+  padding: 0;
+  margin: 0;
+}
+
+.input {
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 100%;
+}
+
+.input>.name {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.input>.quantity {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.items {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+.tally {
+  grid-row-start: 3;
+  grid-row-end: 4;
+
+  border-top: 1px solid black;
+}
