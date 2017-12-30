@@ -59,3 +59,16 @@ input {
 
   border-top: 1px solid black;
 }
+
+.drop {
+  border: 1px solid black;
+}
+
+.drop>h3,
+.drop>p {
+  display: inline-block;
+}
+
+.drop>p {
+  margin-left: 0.5em;
+}

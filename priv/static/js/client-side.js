@@ -1,5 +1,25 @@
 // Copyright of Fredrik A. Madsen-Malmo 2017
 
+// Establish which room was joined
+const room = window.location.pathname.replace(/^\/room\//, '');;
+
+// Establish a WS connection
+const WSConn = new WebSocket('ws://localhost:4001/ws');
+
+// Setup handler for WS conn
+WSConn.addEventListener('message', message => {
+  console.log(message);
+});
+
+// Handle the establishment of a connection
+WSConn.addEventListener('open', message => {
+  console.log('Opened connection to server.');
+  console.log(message);
+
+  // Tell server we joined a room
+  WSConn.send(JSON.stringify({ command: 'join', room }));
+});
+
 // Setup autocomplete
 const nameInput = document.querySelector('.name>input');
 const quantityInput = document.querySelector('.quantity>input');
@@ -57,6 +77,8 @@ function addDrop(item, quantity) {
   // Dispatch a request for price
 
   let dropEl = document.createElement('div');
+  dropEl.className = 'drop';
+
   let nameHeaderEl = document.createElement('h3');
   nameHeaderEl.appendChild(document.createTextNode(item));
 

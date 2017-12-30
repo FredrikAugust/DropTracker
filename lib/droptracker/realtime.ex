@@ -9,19 +9,17 @@ defmodule Droptracker.Realtime do
 
   # Called on websocket connection initialization.
   def websocket_init(_type, req, _opts) do
-    state = %{}
-    {:ok, req, state, @timeout}
-  end
-
-  # Handle 'ping' messages from the browser - reply
-  def websocket_handle({:text, "ping"}, req, state) do
-    {:reply, {:text, "pong"}, req, state}
+    {:ok, req, %{}, @timeout}
   end
   
-  # Handle other messages from the browser - don't reply
-  def websocket_handle({:text, message}, req, state) do
-    IO.puts(message)
-    {:ok, req, state}
+  # Handle 'ping' messages from the browser - reply
+  def websocket_handle({:text, content}, req, state) do
+    case Poison.decode(content) do
+      {:ok, data} ->
+        {:reply, handle_command(data), req, state}
+      _ ->
+        {:reply, {:text, "Invalid request."}, req, state}
+    end
   end
 
   # Format and forward elixir messages to client
@@ -32,5 +30,13 @@ defmodule Droptracker.Realtime do
   # No matter why we terminate, remove all of this pids subscriptions
   def websocket_terminate(_reason, _req, _state) do
     :ok
+  end
+
+  defp handle_command(%{"command" => "join", "room" => room}) do
+    {:text, "Okidoki."}
+  end
+
+  defp handle_command(_) do
+    {:text, "Invalid request"}
   end
 end
