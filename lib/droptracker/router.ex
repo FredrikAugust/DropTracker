@@ -2,7 +2,7 @@ defmodule Droptracker.Router do
   use Plug.Router
 
   plug Plug.Static, at: "/", from: :droptracker,
-    only: ~w(css js room.html)
+    only: ~w(css js fonts room.html)
 
   plug :match
   plug :dispatch

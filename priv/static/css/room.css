@@ -2,6 +2,19 @@
  * Copyright Fredrik A. Madsen-Malmo 2017
  **/
 
+@font-face {
+  font-family: 'osrs-chat-font';
+  src: url('/fonts/runescape_chat_font.eot') format("eot"),
+       url('/fonts/runescape_chat_font.ttf') format("truetype"),
+       url('/fonts/runescape_chat_font.woff') format("woff"),
+       url('/fonts/runescape_chat_font.svg') format("svg");
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'osrs-chat-font';
+}
+
 body,
 html,
 .container {
@@ -17,16 +30,28 @@ html {
 .container {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 10% 80% 10%;
+  grid-template-rows: 7% 81.5% 9%;
 }
 
 input {
   height: 100%;
   width: 100%;
 
-  border: 1px solid rgb(41, 41, 41);
-  padding: 0;
+  padding: 5px 10px;
   margin: 0;
+  border: 0;
+  
+  font-size: 1.5em;
+  color: white;
+  background-color: black;
+}
+
+.input>.quantity>input {
+  color: black;
+  background-color: white;
+  border-bottom: 3px solid black;
+  border-top: 3px solid black;
+  border-right: 3px solid black;
 }
 
 .input {
@@ -36,6 +61,7 @@ input {
   display: grid;
   grid-template-columns: 80% 20%;
   grid-template-rows: 100%;
+
 }
 
 .input>.name {
@@ -45,25 +71,31 @@ input {
 
 .input>.quantity {
   grid-column-start: 2;
-  grid-column-end: 3;
+  grid-column-end: span 2;
 }
 
 .drops {
+  padding: 0 5px;
+
   grid-row-start: 2;
   grid-row-end: 3;
 
   overflow-y: scroll;
 }
 
+.drop {
+  border-bottom: 1px dotted black;
+}
+
 .tally {
   grid-row-start: 3;
   grid-row-end: 4;
 
-  border-top: 1px solid black;
+  padding: 0 5px;
 }
 
-.drop {
-  border: 1px solid black;
+.tally .total {
+  color: #c17900;
 }
 
 .drop>h3,
@@ -73,4 +105,8 @@ input {
 
 .drop>p {
   margin-left: 0.5em;
+}
+
+.price {
+  float: right;
 }
