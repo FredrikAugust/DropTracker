@@ -1,18 +1,26 @@
 defmodule Droptracker do
-  @moduledoc """
-  Documentation for Droptracker.
-  """
+  @moduledoc false
 
-  @doc """
-  Hello world.
+  use Application
 
-  ## Examples
+  def start(_type, _args) do
+    children = [
+      Plug.Adapters.Cowboy.child_spec(:http, MyApp.Router, [], [
+        dispatch: dispatch()
+      ]) 
+    ]
 
-      iex> Droptracker.hello
-      :world
+    opts = [strategy: :one_for_one, name: Droptracker.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
 
-  """
-  def hello do
-    :world
+
+  defp dispatch do
+      [
+        {:_, [
+          {"/ws", Droptracker.Realtime, []},
+          {:_, Plug.Adapters.Cowboy.Handler, {Droptracker.Router, []}}
+        ]}
+      ]
   end
 end
