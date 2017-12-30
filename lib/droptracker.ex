@@ -7,7 +7,7 @@ defmodule Droptracker do
     children = [
       Plug.Adapters.Cowboy.child_spec(:http, Droptracker.Router, [], [
         dispatch: dispatch(),
-        port: 4001
+        port: System.get_env("PORT") || 4001
       ]),
       Supervisor.Spec.worker(Droptracker.Roomkeeper, [], []),
       Supervisor.Spec.worker(Droptracker.Bookkeeper, [], [])
