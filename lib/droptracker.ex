@@ -8,7 +8,8 @@ defmodule Droptracker do
       Plug.Adapters.Cowboy.child_spec(:http, Droptracker.Router, [], [
         dispatch: dispatch(),
         port: 4001
-      ]) 
+      ]),
+      Supervisor.Spec.worker(Droptracker.Roomkeeper, [], [])
     ]
 
     opts = [strategy: :one_for_one, name: Droptracker.Supervisor]

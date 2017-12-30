@@ -29,10 +29,12 @@ defmodule Droptracker.Realtime do
 
   # No matter why we terminate, remove all of this pids subscriptions
   def websocket_terminate(_reason, _req, _state) do
+    GenServer.call(Droptracker.Roomkeeper, :leave)
     :ok
   end
 
   defp handle_command(%{"command" => "join", "room" => room}) do
+    GenServer.call(Droptracker.Roomkeeper, {:join, room})
     {:text, "Okidoki."}
   end
 
