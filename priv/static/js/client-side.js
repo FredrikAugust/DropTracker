@@ -8,7 +8,14 @@ const WSConn = new WebSocket('ws://localhost:4001/ws');
 
 // Setup handler for WS conn
 WSConn.addEventListener('message', message => {
-  console.log(message);
+  const messageParsed = JSON.parse(message.data);
+  console.log(messageParsed);
+
+  switch (messageParsed["command"]) {
+    case "add_drop":
+      renderDrop(messageParsed["drop"]["name"], messageParsed["quantity"]);
+      break;
+  }
 });
 
 // Handle the establishment of a connection
@@ -67,7 +74,7 @@ quantityInput.addEventListener('keydown', e => {
 // Callback for when the user has added item
 
 function addDrop(item, quantity) {
-  console.log(`Adding ${item} x ${quantity}`);
+  console.log(`Dispatching ${item} x ${quantity} to server`);
 
   // Clear the input fields, and revert to original focus
   quantityInput.value = '';
@@ -76,7 +83,9 @@ function addDrop(item, quantity) {
 
   // Tell the server that we're adding a new drop // alert the other clients
   WSConn.send(JSON.stringify({command: 'add_drop', room, drop: getItemByName(item), quantity}))
+}
 
+function renderDrop(item, quantity) {
   let dropEl = document.createElement('div');
   dropEl.className = 'drop';
 

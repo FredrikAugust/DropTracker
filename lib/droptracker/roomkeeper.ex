@@ -9,16 +9,14 @@ defmodule Droptracker.Roomkeeper do
     {:ok, %{}}
   end
 
-  def handle_cast({:join, room, from}, state) do
-    IO.puts("Joining room")
-    updated_state = Map.update(state, room, [from], &(&1 ++ [from]))
-    IO.inspect(updated_state)
-    {:noreply, updated_state}
-  end
-
   def handle_call({:users_in_room, room}, _, state) do
     IO.puts("Getting users in room")
     {:reply, Map.get(state, room), state}
+  end
+
+  def handle_cast({:join, room, from}, state) do
+    updated_state = Map.update(state, room, [from], &(&1 ++ [from]))
+    {:noreply, updated_state}
   end
 
   def handle_cast({:leave, from_pid}, state) do

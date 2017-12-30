@@ -26,7 +26,7 @@ defmodule Droptracker.Realtime do
 
   # Format and forward elixir messages to client
   def websocket_info({:add_drop, drop, quantity}, req, state) do
-    {:ok, response} = Poison.encode(%{"item" => drop, "quantity" => quantity})
+    {:ok, response} = Poison.encode(%{"command" => "add_drop", "drop" => drop, "quantity" => quantity})
     {:reply, {:text, response}, req, state}
   end
 
@@ -42,16 +42,19 @@ defmodule Droptracker.Realtime do
 
   defp handle_command(%{"command" => "join", "room" => room}) do
     GenServer.cast(Droptracker.Roomkeeper, {:join, room, self()})
-    {:text, "Joined room " <> room <> "."}
+    GenServer.cast(Droptracker.Bookkeeper, {:sync_new_user, room, self()})
+    {:ok, response} = Poison.encode(%{"info" => "Joined channel."})
+    {:text, response}
   end
 
   defp handle_command(%{"command" => "add_drop", "drop" => drop, "quantity" => quantity, "room" => room}) do
     GenServer.cast(Droptracker.Bookkeeper, {:add_drop, drop, quantity, room})
-    # TODO: get price and return that
-    {:text, "Added item."}
+    {:ok, response} = Poison.encode(%{"info" => "Added item."})
+    {:text, response}
   end
 
   defp handle_command(_) do
-    {:text, "Invalid request"}
+    {:ok, response} = Poison.encode(%{"error" => "Invalid request."})
+    {:text, response}
   end
 end

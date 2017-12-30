@@ -14,6 +14,21 @@ defmodule Droptracker.Bookkeeper do
 
     Enum.each(users_in_room, &(send(&1, {:add_drop, drop, quantity})))
 
+    new_state = Map.update(state, room, [{drop, quantity}], &([{drop, quantity}] ++ &1))
+
+    IO.inspect(new_state)
+
+    {:noreply, new_state}
+  end
+
+  def handle_cast({:sync_new_user, room, from}, state) do
+    drops = Map.get(state, room)
+
+    Enum.each(drops, fn(drop) ->
+      {dropMap, quantity} = drop
+      send(from, {:add_drop, dropMap, quantity})
+    end)
+
     {:noreply, state}
   end
 end
