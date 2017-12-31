@@ -87,6 +87,11 @@ input {
   border-bottom: 1px dotted black;
 }
 
+.drop>img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
 .tally {
   grid-row-start: 3;
   grid-row-end: 4;

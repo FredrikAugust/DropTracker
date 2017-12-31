@@ -109,6 +109,10 @@ function renderDrop(item, quantity) {
   priceEl.className = 'price';
   priceEl.appendChild(document.createTextNode('Retrieving price...'));
 
+  let thumbEl = document.createElement('img');
+  thumbEl.src = `https://secure.runescape.com/m=itemdb_oldschool/1513605640124_obj_sprite.gif?id=${itemID}`;
+
+  dropEl.appendChild(thumbEl);
   dropEl.appendChild(nameHeaderEl);
   dropEl.appendChild(quantityEl);
   dropEl.appendChild(priceEl);
@@ -118,22 +122,31 @@ function renderDrop(item, quantity) {
   if (itemID === -1) {
     const items = document.querySelectorAll(`.item-${itemID}>.price`);
     for (const item of items) {
-      item.innerHTML = `Overall: 1 | Buying: 1 | Selling: 1`;
+      item.innerHTML = `Price per: 1 gold piece`;
     }
     
     sumOfDrops += Number(quantity);
     document.querySelector('.tally .total').innerHTML = sumOfDrops;
     return; // stop the query from being sent
   }
+
   
-  fetch(`https://api.rsbuddy.com/grandExchange?a=guidePrice&i=${itemID}`).then((response) => {
+  fetch(`https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=${itemID}`).then((response) => {
     return response.json();
   }).then((blob) => {
     const items = document.querySelectorAll(`.item-${itemID}>.price`);
     for (const item of items) {
-      item.innerHTML = `Overall: ${blob.overall} | Buying: ${blob.buying} | Selling: ${blob.selling}`;
+      item.innerHTML = `Price per: ${blob["current"]["price"]} gold pieces`
     }
-    sumOfDrops += blob.overall * quantity;
+
+    let price = blob["current"]["price"].toLowerCase();
+    price = price.replace('k', '000')
+                 .replace('m', '000000')
+                 .replace('.', '');
+
+    price = Number(price);
+
+    sumOfDrops += price * quantity;
     document.querySelector('.tally .total').innerHTML = sumOfDrops;
   });
 }
