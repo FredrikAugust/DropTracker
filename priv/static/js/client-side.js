@@ -121,7 +121,7 @@ function renderDrop(item, quantity) {
       item.innerHTML = `Overall: 1 | Buying: 1 | Selling: 1`;
     }
     
-    sumOfDrops += quantity;
+    sumOfDrops += Number(quantity);
     document.querySelector('.tally .total').innerHTML = sumOfDrops;
     return; // stop the query from being sent
   }
