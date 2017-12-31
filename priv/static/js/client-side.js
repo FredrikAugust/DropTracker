@@ -18,6 +18,22 @@ WSConn.addEventListener('message', message => {
     case "add_drop":
       renderDrop(messageParsed["drop"]["name"], messageParsed["quantity"]);
       break;
+    case "price":
+      const items = document.querySelectorAll(`.item-${messageParsed["item_id"]}>.price`);
+      for (const item of items) {
+        item.innerHTML = `Price per: ${messageParsed["price"]} gold pieces`
+      }
+
+      let price = String(messageParsed["price"]).toLowerCase();
+      price = price.replace('k', '000')
+        .replace('m', '000000')
+        .replace('.', '');
+
+      price = Number(price);
+
+      sumOfDrops += price * Number(messageParsed["quantity"]);
+      document.querySelector('.tally .total').innerHTML = sumOfDrops;
+      break;
   }
 });
 
@@ -130,25 +146,7 @@ function renderDrop(item, quantity) {
     return; // stop the query from being sent
   }
 
-  
-  fetch(`https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=${itemID}`).then((response) => {
-    return response.json();
-  }).then((blob) => {
-    const items = document.querySelectorAll(`.item-${itemID}>.price`);
-    for (const item of items) {
-      item.innerHTML = `Price per: ${blob["current"]["price"]} gold pieces`
-    }
-
-    let price = blob["current"]["price"].toLowerCase();
-    price = price.replace('k', '000')
-                 .replace('m', '000000')
-                 .replace('.', '');
-
-    price = Number(price);
-
-    sumOfDrops += price * quantity;
-    document.querySelector('.tally .total').innerHTML = sumOfDrops;
-  });
+  WSConn.send(JSON.stringify({command: 'price', itemID, quantity}));
 }
 
 function removeDrop(item, quantity) {

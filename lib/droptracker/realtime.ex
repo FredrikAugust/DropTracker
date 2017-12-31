@@ -53,6 +53,16 @@ defmodule Droptracker.Realtime do
     {:text, response}
   end
 
+  defp handle_command(%{"command" => "price", "itemID" => item_id, "quantity" => quantity}) do
+    jsonResponse = HTTPotion.get("https://services.runescape.com/m=itemdb_oldschool/api/catalogue/detail.json?item=" <> Integer.to_string(item_id)).body
+               |> Poison.decode!
+
+    price = Map.get(jsonResponse, "item") |> Map.get("current") |> Map.get("price")
+    {:ok, response} = Poison.encode(%{"command" => "price", "price" => price, "item_id" => item_id, "quantity" => quantity})
+
+    {:text, response}
+  end
+
   defp handle_command(_) do
     {:ok, response} = Poison.encode(%{"error" => "Invalid request."})
     {:text, response}

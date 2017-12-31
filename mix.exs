@@ -14,7 +14,7 @@ defmodule Droptracker.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      applications: [:cowboy, :plug],
+      applications: [:cowboy, :plug, :httpotion],
       extra_applications: [:logger],
       mod: {Droptracker, []},
       registered: [Droptracker]
@@ -26,7 +26,8 @@ defmodule Droptracker.Mixfile do
     [
       {:cowboy, "~> 1.0.0"},
       {:plug, "~> 1.0"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:httpotion, "~> 3.0.2"}
     ]
   end
 end
