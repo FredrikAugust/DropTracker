@@ -2,8 +2,6 @@
 
 _insert cool logo and a ton of badges from a hundred thousand CI websites so I look hipster and cool as well_
 
-![screenshot](https://i.imgur.com/1fhEaiX.png)
-
 **DISCLAIMER**:
 
 This code is what most people will call 'not so good', so expect bugs and random crashes. I might fix it if people actually start using this
