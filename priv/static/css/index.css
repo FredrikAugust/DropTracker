@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'osrs-chat-font';
+  src: url('/fonts/runescape_chat_font.eot') format("eot"),
+       url('/fonts/runescape_chat_font.svg') format("svg"),
+       url('/fonts/runescape_chat_font.woff') format("woff"),
+       url('/fonts/runescape_chat_font.ttf') format("truetype");
+}
+
+body {
+  width: 70%;
+  margin: auto;
+}
+
+* {
+  font-size: 1.2em;
+}
+
+h1 {
+  background-color: black;
+  color: white;
+}
+
+h1, h3, p, li {
+  font-family: 'osrs-chat-font';
+}
