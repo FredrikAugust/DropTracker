@@ -9,10 +9,6 @@ _insert cool logo and a ton of badges from a hundred thousand CI websites so I l
 This code is what most people will call 'not so good', so expect bugs and random crashes. I might fix it if people actually start using this
 (as a matter of fact I will most likely rewrite the entire thing in erlang since erlang is the best programming language ever \s(not the erlang part though)).
 
-**DISCLAIMER PART 2**:
-
-As you might have noticed, there arent't really many items added to the website. To help with this, add to `/priv/static/js/items.js` in a PR, and I'll merge it. If you have a complete list of items, _please_ contact me.
-
 ## Running
 
 Make sure you have `elixir ~> 1.5`.
@@ -52,7 +48,6 @@ The prices are all retrieved from OSBuddy exchange.
 - Remove entries / Edit
 - Design (don't look at me, I'm the programmer)
 - Rewrite back-end
-- Find more things to add to this list
 
 ## License
 
