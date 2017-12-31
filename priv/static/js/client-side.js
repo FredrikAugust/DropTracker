@@ -114,7 +114,18 @@ function renderDrop(item, quantity) {
   dropEl.appendChild(priceEl);
   
   dropsEl.prepend(dropEl);
-
+  
+  if (itemID === -1) {
+    const items = document.querySelectorAll(`.item-${itemID}>.price`);
+    for (const item of items) {
+      item.innerHTML = `Overall: 1 | Buying: 1 | Selling: 1`;
+    }
+    
+    sumOfDrops += quantity;
+    document.querySelector('.tally .total').innerHTML = sumOfDrops;
+    return; // stop the query from being sent
+  }
+  
   fetch(`https://api.rsbuddy.com/grandExchange?a=guidePrice&i=${itemID}`).then((response) => {
     return response.json();
   }).then((blob) => {
